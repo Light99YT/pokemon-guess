@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Pok%C3%A9_Ball_icon.svg/1280px-Pok%C3%A9_Ball_icon.svg.png" type="image/x-icon">
+    <title>Pokémon Guess</title>
+</head>
+<body>
+    <header>
+        <div id="title">
+            <h1>¡Pokemon Guess!</h1>
+        </div>
+    </header>
+    <main>
+        <section id="game">
+            <div id="target">
+                <p>Guess the Pokémon with the Pokédex number.</p>
+                <div><b class="red">Red</b> is lower, <b class="yellow">Yellow</b> is higher.</div>
+                <div id="pokemon-number">#???</div>
+                <div id="buttons">
+                    <button id="surrender-button">Surrender</button>
+                    <button id="replay-button">Replay</button>
+                </div>
+            </div>
+
+            <div id="guess-container">
+                <input type="text" id="guess-input" placeholder="Search Pokemon..." autocomplete="off">
+                <button id="guess-button">Guess</button>
+                <div id="suggestions"></div>
+            </div>
+
+            <div id="message"></div>
+
+            <section id="guesses">
+                <div class="guess-header">
+                    <div>Pokémon</div>
+                    <div>Number</div>
+                    <div>Type 1</div>
+                    <div>Type 2</div>
+                    <div>Generation</div>
+                    <div>Stage</div>
+                    <div>Color</div>
+                </div>
+                <div id="guess-list"></div>
+            </section>
+        </section>
+    </main>
+    <script src="./javascript/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,436 @@
+/*CSS*/
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.cdnfonts.com/css/pokemon-solid');
+
+:root {
+    --clr-black: #1c1c1c;
+    --clr-gray: #ececec;
+    --clr-white: #f7f7f7;
+    --clr-pokeball: #F31A1A;
+
+    --clr-correct: #55b455; 
+    --clr-partial: #e5b83f; 
+    --clr-wrong: #d9534f;
+
+    --type-normal: #A8A878;
+    --type-fire: #F08030;
+    --type-water: #6890F0;
+    --type-grass: #78C850;
+    --type-electric: #F8D030;
+    --type-ice: #98D8D8;
+    --type-fighting: #C03028;
+    --type-poison: #A040A0;
+    --type-ground: #E0C068;
+    --type-flying: #A890F0;
+    --type-psychic: #F85888;
+    --type-bug: #A8B820;
+    --type-rock: #B8A038;
+    --type-ghost: #705898;
+    --type-dark: #705848;
+    --type-dragon: #7038F8;
+    --type-steel: #B8B8D0;
+    --type-fairy: #F0B6BC;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    color: var(--clr-black);
+    font-family: 'Rubik', sans-serif;
+}
+
+body{
+    min-width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: var(--clr-white);
+}
+
+/* ========================= HEADER ========================= */
+
+header{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 100%;
+    background-color: var(--clr-pokeball);
+    border-bottom: 5px solid var(--clr-black);
+}
+
+
+h1{
+    font-family: 'Pokemon Solid', sans-serif;
+    font-size: clamp(2.5rem, 6vw, 3rem);
+    letter-spacing: 0.3rem;
+    color: var(--clr-black);
+}
+
+/* ========================= MAIN ========================= */
+
+main {
+    width: 100%;
+
+    display: flex;
+    justify-content: center;
+
+    padding: 2rem 1rem;
+}
+
+#game {
+    width: min(100%, 1000px);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    gap: 2rem;
+}
+
+
+/* ========================= TARGET NUMBER ========================= */
+
+#target {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    gap: 0.5rem;
+
+    text-align: center;
+}
+
+.red{
+    color: var(--clr-wrong);
+}
+
+.yellow{
+    color: var(--clr-partial);
+}
+
+#target p {
+    font-size: 1.1rem;
+    color: #555;
+}
+
+#pokemon-number {
+    font-size: clamp(4rem, 12vw, 7rem);
+    font-weight: 800;
+
+    line-height: 1;
+
+    padding: 1rem 2rem;
+
+    border-radius: 1rem;
+
+    background-color: var(--clr-black);
+    color: white;
+
+    box-shadow: 0 5px 0 #000;
+}
+
+#buttons {
+    display: flex;
+    gap: 0.75rem;
+}
+
+#buttons button {
+    padding: 0.7rem 1.2rem;
+    border: 2px solid var(--clr-black);
+    border-radius: 0.5rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.15s ease;
+}
+
+#surrender-button {
+    background-color: var(--clr-wrong);
+}
+
+#replay-button {
+    background-color: var(--clr-correct);
+}
+
+
+/* ========================= GUESS INPUT ========================= */
+
+#guess-container {
+    position: relative;
+
+    width: min(100%, 500px);
+
+    display: flex;
+
+    gap: 0.75rem;
+}
+
+#guess-input {
+    flex: 1;
+
+    padding: 0.9rem 1rem;
+
+    border: 2px solid var(--clr-black);
+    border-radius: 0.5rem;
+
+    background-color: white;
+
+    font-size: 1rem;
+
+    outline: none;
+}
+
+#guess-input:focus {
+    border-color: var(--clr-pokeball);
+}
+
+#guess-button {
+    padding: 0.9rem 1.5rem;
+
+    border: 2px solid var(--clr-black);
+    border-radius: 0.5rem;
+
+    background-color: var(--clr-pokeball);
+
+    font-weight: 700;
+    font-size: 1rem;
+
+    cursor: pointer;
+
+    transition: 0.15s ease;
+}
+
+#guess-button:hover {
+    transform: translateY(-2px);
+
+    box-shadow: 0 3px 0 var(--clr-black);
+}
+
+#guess-button:active {
+    transform: translateY(1px);
+
+    box-shadow: none;
+}
+
+
+/* =========================
+   SUGGESTIONS
+========================= */
+
+#suggestions {
+    position: absolute;
+
+    top: calc(100% + 0.5rem);
+    left: 0;
+
+    width: calc(100% - 100px);
+
+    display: flex;
+    flex-direction: column;
+
+    overflow: hidden;
+
+    border-radius: 0.5rem;
+
+    background-color: white;
+
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+
+    z-index: 10;
+}
+
+.suggestion {
+    padding: 0.75rem 1rem;
+
+    display: flex;
+    align-items: center;
+
+    gap: 0.75rem;
+
+    cursor: pointer;
+}
+
+.suggestion:hover {
+    background-color: var(--clr-gray);
+}
+
+.suggestion img {
+    width: 40px;
+    height: 40px;
+
+    object-fit: contain;
+}
+
+
+/* =========================
+   MESSAGE
+========================= */
+
+#message {
+    min-height: 1.5rem;
+
+    font-weight: 600;
+
+    text-align: center;
+}
+
+
+/* =========================
+   GUESS TABLE
+========================= */
+
+#guesses {
+    width: 100%;
+
+    overflow-x: auto;
+}
+
+.guess-header,
+.guess-row {
+    min-width: 750px;
+
+    display: grid;
+
+    grid-template-columns:
+        2fr
+        1fr
+        1.3fr
+        1.3fr
+        1.2fr
+        1fr
+        1fr;
+        
+    gap: 0.5rem;
+}
+
+
+/* =========================
+   TABLE HEADER
+========================= */
+
+.guess-header {
+    margin-bottom: 0.5rem;
+}
+
+.guess-header > div {
+    padding: 0.75rem 0.5rem;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color: var(--clr-black);
+
+    color: white;
+
+    border-radius: 0.35rem;
+
+    font-size: 0.85rem;
+    font-weight: 600;
+
+    text-align: center;
+}
+
+
+/* =========================
+   GUESS ROW
+========================= */
+
+#guess-list {
+    display: flex;
+    flex-direction: column;
+
+    gap: 0.5rem;
+}
+
+.guess-row > div {
+    min-height: 70px;
+
+    padding: 0.5rem;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color: white;
+
+    border: 2px solid var(--clr-black);
+    border-radius: 0.35rem;
+
+    font-weight: 500;
+
+    text-align: center;
+}
+
+
+/* =========================
+   POKÉMON CELL
+========================= */
+
+.pokemon-cell {
+    gap: 0.75rem;
+}
+
+.pokemon-cell img {
+    width: 60px;
+    height: 60px;
+
+    object-fit: contain;
+}
+
+.pokemon-cell span {
+    font-weight: 600;
+}
+
+
+/* =========================
+   HINT COLORS
+========================= */
+
+.hint.correct {
+    background-color: var(--clr-correct);
+    color: white;
+}
+
+.hint.partial {
+    background-color: var(--clr-partial);
+    color: white;
+}
+
+.hint.wrong {
+    background-color: var(--clr-wrong);
+    color: white;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 600px) {
+
+    main {
+        padding: 1.5rem 0.5rem;
+    }
+
+    #guess-container {
+        flex-direction: column;
+    }
+
+    #guess-button {
+        width: 100%;
+    }
+
+    #suggestions {
+        width: 100%;
+    }
+
+    h1 {
+        font-size: 2.8rem;
+    }
+
+    #pokemon-number {
+        padding: 0.75rem 1.5rem;
+    }
+}
