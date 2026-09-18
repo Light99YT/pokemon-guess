@@ -6,26 +6,28 @@ const suggestions = document.getElementById("suggestions");
 const message = document.getElementById("message");
 const surrenderButton = document.getElementById("surrender-button");
 const replayButton = document.getElementById("replay-button");
+const triesMessage = document.getElementById("tries");
 
 let targetPokemon;
 let speciesTarget;
 let evolutionChainTarget;
+let tries = 0;
 
 let selectedPokemon;
 let guesses = [];
 
 let allPokemon = [];
-let pokemonGuion = ["mr-mime","mr-rime","mime-jr","porygon-2","porygon-z","ho-oh","jangmo-o","hakamo-o","kommo-o"];
-let removeGuion = ["nidoran-f","nidoram-m","mr-mime","mr-rime","mime-jr","type-null","tapu-koko","tapu-lele","tapu-bulu","tapu-fini","scream-tail","brute-bonnet","great-tusk","flutter-mane","slither-wing","sandy-shocks","iron-treads","iron-bundle","iron-hands","iron-jugulis","iron-moth","iron-thorns","roaring-moon","iron-valiant","walking-wake","iron-leaves","raging-bolt","gouging-fire","iron-boulder","iron-crown"];
-let removeAfterGuion = [
-    "deoxys","wormadam","giratina","shaymin","basculin","darmanitan",
-    "frillish","jellicent","tornadus","thundurus","landorus",
-    "keldeo","meloetta","pyroar","meowstic","aegislash",
-    "pumpkaboo","gourgeist","zygarde","oricorio","lycanroc",
-    "wishiwashi","minior","mimikyu","toxtricity","eiscue",
-    "indeedee","morpeko","urshifu","basculegion","enamorus",
-    "oinkologne","maushold","squawkabilly","palafin",
-    "tatsugiri","dudunsparce"
+let allPokemonNames = [];
+let pokemonHyphen = ["mr-mime","mr-rime","mime-jr","porygon-2","porygon-z","ho-oh","jangmo-o","hakamo-o","kommo-o"];
+let removeHyphen = ["nidoran-f","nidoram-m","mr-mime","mr-rime","mime-jr","type-null","tapu-koko","tapu-lele","tapu-bulu","tapu-fini","scream-tail","brute-bonnet","great-tusk","flutter-mane","slither-wing","sandy-shocks","iron-treads","iron-bundle","iron-hands","iron-jugulis","iron-moth","iron-thorns","roaring-moon","iron-valiant","walking-wake","iron-leaves","raging-bolt","gouging-fire","iron-boulder","iron-crown"];
+let removeAfterHyphen = [
+    "deoxys-normal","wormadam-plant","giratina-altered","shaymin-land","basculin-red-striped","darmanitan-standard",
+    "frillish-male","jellicent-male","tornadus-incarnate","thundurus-incarnate","landorus-incarnate",
+    "keldeo-ordinary","meloetta-aria","pyroar-male","meowstic-male","aegislash-shield",
+    "pumpkaboo-average","gourgeist-average","zygarde-50","oricorio-baile","lycanroc-midday",
+    "wishiwashi-solo","minior-red-meteor","mimikyu-disguised","toxtricity-amped","eiscue-ice",
+    "indeedee-male","morpeko-full-belly","urshifu-single-strike","basculegion-male","enamorus-incarnate",
+    "oinkologne-male","maushold-family-of-four","squawkabilly-green-plumage","palafin-zero","tatsugiri-curly","dudunsparce-two-segment"
 ];
 
 
@@ -45,10 +47,19 @@ for (let i = 1; i <= 1025; i++) {
 
 Promise.all(promises).then(pokemon => {
     allPokemon=pokemon;
+    allPokemonNames = pokemon.map(p => formatName(p.name));
     startGame();
 })
 
+function formatName(name){
+    if (removeHyphen.includes(name)) return name.replace("-", " ");
+    if (removeAfterHyphen.includes(name)) return name.split("-")[0];
+    return name;
+}
+
 async function startGame(){
+    tries=0;
+    triesMessage.textContent = `${tries}`;
     const r = Math.floor(Math.random()*1025);
     targetPokemon = allPokemon[r];
     let speciesResponse = await fetch(targetPokemon.species.url);
@@ -65,18 +76,19 @@ guessInput.addEventListener("input", () => {
 
     if (search.length < 2) return;
     const filteredPokemon = allPokemon.filter(pokemon => 
-        pokemon.name.includes(search)
+        formatName(pokemon.name).toLowerCase().includes(search)
     );
 
     filteredPokemon.slice(0,5).forEach(pokemon => {
         const suggestion = document.createElement("div");
         suggestion.classList.add("suggestion");
-        let nombre = pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1);
-        suggestion.innerHTML = `<img src="${pokemon.sprites.front_default}"> ${nombre}`
+        let name = formatName(pokemon.name);
+        name = name.charAt(0).toUpperCase() + name.slice(1);
+        suggestion.innerHTML = `<img src="${pokemon.sprites.front_default}"> ${name}`
 
         suggestion.addEventListener("click", () => {
             selectedPokemon = pokemon;
-            guessInput.value = nombre;
+            guessInput.value = name;
             suggestions.innerHTML = "";
         })
 
@@ -95,7 +107,6 @@ guessInput.addEventListener("keydown", (e) => {
             firstSuggestion.click();
         } else if (selectedPokemon){
             checkGuess()
-            guessInput.value="";
         } else{
             message.textContent = "Select a Pokemon.";
         }
@@ -121,16 +132,19 @@ function checkGuess(){
     }
 
     const guess = guessInput.value.toLowerCase().trim();
-    if (guess===targetPokemon.name){
+    if (selectedPokemon.id===targetPokemon.id){
         message.textContent = "¡Felicidades!"
-    } else {
+    } else if (allPokemonNames.includes(guess)){
         message.textContent = "¡Incorrecto!";
     }
-    addGuessList(guess);
+    tries++;
+    triesMessage.textContent = `${tries}`;
+    addGuessList(selectedPokemon);
+    guessInput.value = "";
+    selectedPokemon = null;
 }
 
-function addGuessList(guess){
-    const pokemon = allPokemon.find(pokemon => pokemon.name === guess);
+function addGuessList(pokemon){
     if (!pokemon || guesses.includes(pokemon)) return;
     guesses.push(pokemon);
     loadGuess(pokemon);
@@ -192,11 +206,13 @@ function formatGen(gen){
 }
 
 function getStage(name, chain, currentStage){
-    if (chain.species.name === name){
+    const baseName = formatName(name);
+
+    if (chain.species.name === baseName){
         return currentStage;
     }
     for (const evolution of chain.evolves_to){
-        const result = getStage(name, evolution, currentStage+1);
+        const result = getStage(baseName, evolution, currentStage+1);
         if (result != null) return result;
     }
     return null;
@@ -213,11 +229,15 @@ function getHints(guess, guessSpecies, guessChain){
     } else ans.numberComp = "correct";
 
     if (guess.types[0].type.name!==targetPokemon.types[0].type.name) 
-        ans.type1Comp = "wrong"; 
+        if ((targetPokemon.types[1] ? targetPokemon.types[1].type.name : "None")===guess.types[0].type.name)
+            ans.type1Comp = "partial";
+        else ans.type1Comp = "wrong"; 
     else ans.type1Comp = "correct";
 
     if ((guess.types[1] ? guess.types[1].type.name : "None") !== (targetPokemon.types[1] ? targetPokemon.types[1].type.name : "None"))
-        ans.type2Comp = "wrong";
+        if ((guess.types[1] ? guess.types[1].type.name : "None")===targetPokemon.types[0].type.name)
+            ans.type2Comp = "partial";
+        else ans.type2Comp = "wrong";
     else ans.type2Comp = "correct";
 
     if(guessSpecies.generation.name === speciesTarget.generation.name) 
@@ -225,7 +245,7 @@ function getHints(guess, guessSpecies, guessChain){
     else ans.generationComp = compareGen(guessSpecies.generation.name, speciesTarget.generation.name)<0 ? "partial" : "wrong";
 
     if (guessStage !== targetStage)
-        ans.stageComp = guessStage>targetStage ? "partial" : "wrong";
+        ans.stageComp = guessStage<targetStage ? "partial" : "wrong";
     else ans.stageComp = "correct";
 
     if (guessSpecies.color.name !== speciesTarget.color.name)
@@ -255,7 +275,7 @@ function compareGen(guessGen, targetGen){
 }
 
 surrenderButton.addEventListener("click", () => {
-    addGuessList(targetPokemon.name);
+    addGuessList(targetPokemon);
 })
 
 replayButton.addEventListener("click", () => {
