@@ -19,7 +19,7 @@ let guesses = [];
 let allPokemon = [];
 let allPokemonNames = [];
 let pokemonHyphen = ["mr-mime","mr-rime","mime-jr","porygon-2","porygon-z","ho-oh","jangmo-o","hakamo-o","kommo-o"];
-let removeHyphen = ["nidoran-f","nidoram-m","mr-mime","mr-rime","mime-jr","type-null","tapu-koko","tapu-lele","tapu-bulu","tapu-fini","scream-tail","brute-bonnet","great-tusk","flutter-mane","slither-wing","sandy-shocks","iron-treads","iron-bundle","iron-hands","iron-jugulis","iron-moth","iron-thorns","roaring-moon","iron-valiant","walking-wake","iron-leaves","raging-bolt","gouging-fire","iron-boulder","iron-crown"];
+let removeHyphen = ["nidoran-f","nidoran-m","mr-mime","mr-rime","mime-jr","type-null","tapu-koko","tapu-lele","tapu-bulu","tapu-fini","scream-tail","brute-bonnet","great-tusk","flutter-mane","slither-wing","sandy-shocks","iron-treads","iron-bundle","iron-hands","iron-jugulis","iron-moth","iron-thorns","roaring-moon","iron-valiant","walking-wake","iron-leaves","raging-bolt","gouging-fire","iron-boulder","iron-crown"];
 let removeAfterHyphen = [
     "deoxys-normal","wormadam-plant","giratina-altered","shaymin-land","basculin-red-striped","darmanitan-standard",
     "frillish-male","jellicent-male","tornadus-incarnate","thundurus-incarnate","landorus-incarnate",
